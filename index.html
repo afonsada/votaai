@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vota aí - Node.js</title>
+</head>
+<body>
+    <h1>Escolha em que melhor</h1>
+    <form action="/vote/new" method="POST" id="pollform">
+        <label for="manha"> Manha </label> 
+        <input
+            id="manha"
+            name="manha"
+            type="checkbox"
+            class="checkbox"
+            onclick="vote(this)"
+         />
+
+        <label for="tarde"> Tarde </label> 
+        <input
+            id="tarde"
+            name="tarde"
+            type="checkbox"
+            class="checkbox"
+            onclick="vote(this)"
+         />
+
+        <label for="noite"> Noite </label> 
+        <input
+            id="noite"
+            name="noite"
+            type="checkbox"
+            class="checkbox"
+            onclick="vote(this)"
+         />
+
+        <input type="submit" />
+    </form>
+    <br/> <hr/> <br/>
+    
+    <h1>Resultados: </h1>
+    <p>
+        Manha: 
+        <span id="manhavotes"></span>
+        votos
+    </p>
+
+    <p>
+        Tarde: 
+        <span id="tardevotes"></span>
+        votos
+    </p>
+
+    <p>
+        Noite: 
+        <span id="noitevotes"></span>
+        votos
+    </p>
+
+    <script>
+        let pollform = document.getElementById('pollform');
+        let vote = (element) => {
+            let checkboxes = document.getElementsByClassName('checkbox');
+            for(let i = 0; i <= checkboxes.length - 1; i++){
+                if(checkboxes[i].id !== element.id){
+                    checkboxes[i].checked = false;
+                }
+            }
+        }
+        window.onload = () => {
+            fetch('/poll').then((results) => {
+                results.json().then((data) => {
+                for(x in data) {
+                    document.getElementById(x + 'votes').innerText = data[x];
+                }
+            })
+        })
+    }
+    </script>
+</body>
+</html>
